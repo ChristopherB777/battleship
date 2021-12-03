@@ -22,15 +22,14 @@ public class SparseArray
         entries.add(entry);
     }
     
+
+    
     public void clear()
     {
         entries.clear();
     }
     
-    public static void Reset()
-    {
-        
-    }
+
     
     public int getNumRows()
     {
@@ -40,6 +39,20 @@ public class SparseArray
     {
         return (numCols);
     }
+    
+    
+    public DestroyerPiece.Direction getDirAt(int row, int col)
+    {
+        for(SparseArrayEntry aArray : entries)
+        {
+            if(aArray.getRow() == row && aArray.getCol() == col)
+                return aArray.getDir();
+        }
+        return DestroyerPiece.Direction.Down;
+    }
+    
+    
+
     public int getValueAt(int row, int col)
     {
         for(SparseArrayEntry aArray : entries)
@@ -62,12 +75,15 @@ class SparseArrayEntry
     private int row;
     public int col;
     private int value;
+    private DestroyerPiece.Direction dir;
+
     
-    public SparseArrayEntry(int r, int c, int v)
+    public SparseArrayEntry(int r, int c, int v, DestroyerPiece.Direction d)
     {
         row = r;
         col = c;
         value = v;
+        dir = d;
     }
     public int getRow()
     {
@@ -81,6 +97,11 @@ class SparseArrayEntry
     {
         return (value);
     }    
+    
+    public DestroyerPiece.Direction getDir()
+    {
+        return(dir);
+    }
     
 }
 

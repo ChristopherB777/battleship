@@ -6,11 +6,11 @@ public class Board {
     public final static int NUM_ROWS = 10;
     public final static int NUM_COLUMNS = 10;          
     private static int points;
-    private static ShipPiece board[][] = new ShipPiece[NUM_ROWS][NUM_COLUMNS];
+    private static DestroyerPiece board[][] = new DestroyerPiece[NUM_ROWS][NUM_COLUMNS];
     public static DestroyerPiece.Direction rotation;
     public static SparseArray sparseArray = new SparseArray(10,10);
-    
-    
+    static DestroyerPiece.Direction dir = DestroyerPiece.Direction.Right; 
+    public static int ShipType;
     
    // DestroyerPiece
   
@@ -48,10 +48,12 @@ public class Board {
         for (int zrow=0;zrow<NUM_ROWS;zrow++){
             for (int zcol=0;zcol<NUM_COLUMNS;zcol++){
             if(board[zrow][zcol] != null){
-                if(board[zrow][zcol].getColor() == Color.LIGHT_GRAY)
+                if(board[zrow][zcol].getColor() == Color.LIGHT_GRAY){
                     val = 1;
+                    dir = board[zrow][zcol].getDir();
+                }
                // else if
-                sparseArray.add(new SparseArrayEntry(zrow,zcol,val));
+                sparseArray.add(new SparseArrayEntry(zrow,zcol,val,dir));
             }
             }
         }
@@ -78,8 +80,9 @@ public class Board {
         {
             for (int c = 0;c < sparseArray.getNumCols();c++)
             {
-                if(sparseArray.getValueAt(r,c) == 1)
-                board[r][c] = new DestroyerPiece(Color.LIGHT_GRAY,r,c,(int)(Math.random()*4+2),rotation);
+                if(sparseArray.getValueAt(r,c) == 1){
+                board[r][c] = new DestroyerPiece(Color.LIGHT_GRAY,r,c,(int)(Math.random()*4+2),sparseArray.getDirAt(r, c));
+                }
             }
         }
     }
@@ -95,6 +98,7 @@ public class Board {
     
         rotation = DestroyerPiece.Direction.Right;
 
+        sparseArray.clear();
     }
     
     public SparseArray getArray()
