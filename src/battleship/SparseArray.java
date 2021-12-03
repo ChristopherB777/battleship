@@ -122,5 +122,7 @@ class SparseArrayEntry
         return(dir);
     }
     
+
+    
 }
 
