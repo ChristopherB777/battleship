@@ -10,6 +10,11 @@ public class Player {
     public static SparseArray player2 = new SparseArray(10,10);
 
     
+    Player(SparseArray _player)
+    {
+        array = _player;
+    }
+    
     public static void Reset()
     {
         players[0] = new Player(player1);
@@ -20,15 +25,23 @@ public class Player {
     
     public void switchTurn()
     {
-        
+        if(currentTurn == players[0])
+            currentTurn =players[1];
+        else
+        currentTurn = players[0]; 
     }
     
-    
-    
-    Player(SparseArray _player)
+    public SparseArray swapArray(SparseArray _array)
     {
-        array = _player;
+        currentTurn.array = _array;
+        return(currentTurn.array);
     }
+    
+    public static Player GetCurrentTurn() {
+        return (currentTurn);
+    }
+    
+
     
     public static Player getplayer1()
     {
@@ -39,5 +52,6 @@ public class Player {
         return(players[1]);
     }   
     
+
     
 }

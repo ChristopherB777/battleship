@@ -29,7 +29,7 @@ public class Board {
         int column = xpixelOffset/xdelta;       
         int row = ypixelOffset/ydelta;    
 
-        board[row][column] = new DestroyerPiece(Color.LIGHT_GRAY,row,column,4,rotation);
+        board[row][column] = new DestroyerPiece(Color.LIGHT_GRAY,row,column,(int)(Math.random()*4+2),rotation);
 
     }
     public static void Rotate()
@@ -79,7 +79,7 @@ public class Board {
             for (int c = 0;c < sparseArray.getNumCols();c++)
             {
                 if(sparseArray.getValueAt(r,c) == 1)
-                board[r][c] = new DestroyerPiece(Color.LIGHT_GRAY,r,c,4,rotation);
+                board[r][c] = new DestroyerPiece(Color.LIGHT_GRAY,r,c,(int)(Math.random()*4+2),rotation);
             }
         }
     }
@@ -94,12 +94,12 @@ public class Board {
                 board[zrow][zcol] = null; 
     
         rotation = DestroyerPiece.Direction.Right;
-        
- 
 
-
-        
-
+    }
+    
+    public SparseArray getArray()
+    {
+        return(sparseArray);
     }
     
     public static void Draw(Graphics2D g) {
