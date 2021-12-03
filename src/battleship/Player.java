@@ -24,6 +24,7 @@ public class Player {
     }
     
     
+    
     Player(SparseArray _player)
     {
         array = _player;

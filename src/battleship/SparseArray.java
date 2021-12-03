@@ -22,6 +22,16 @@ public class SparseArray
         entries.add(entry);
     }
     
+    public void clear()
+    {
+        entries.clear();
+    }
+    
+    public static void Reset()
+    {
+        
+    }
+    
     public int getNumRows()
     {
         return (numRows);

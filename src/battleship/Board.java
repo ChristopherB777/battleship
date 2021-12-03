@@ -43,6 +43,7 @@ public class Board {
     
     public static void Load()
     {
+        
     int val = 0;
         for (int zrow=0;zrow<NUM_ROWS;zrow++){
             for (int zcol=0;zcol<NUM_COLUMNS;zcol++){
@@ -68,8 +69,11 @@ public class Board {
         
     }
    
+
+
+    
     public static void unLoad(){
-        Load();
+        Reset();
         for (int r = 0;r < sparseArray.getNumRows();r++)
         {
             for (int c = 0;c < sparseArray.getNumCols();c++)
