@@ -29,6 +29,7 @@ public class Board {
         int column = xpixelOffset/xdelta;       
         int row = ypixelOffset/ydelta;    
 
+        
         board[row][column] = new DestroyerPiece(Color.LIGHT_GRAY,row,column,(int)(Math.random()*4+2),rotation);
 
     }
@@ -51,9 +52,10 @@ public class Board {
                 if(board[zrow][zcol].getColor() == Color.LIGHT_GRAY){
                     val = 1;
                     dir = board[zrow][zcol].getDir();
+                    ShipType = board[zrow][zcol].getType();
                 }
                // else if
-                sparseArray.add(new SparseArrayEntry(zrow,zcol,val,dir));
+                sparseArray.add(new SparseArrayEntry(zrow,zcol,val,dir,ShipType));
             }
             }
         }
@@ -81,7 +83,7 @@ public class Board {
             for (int c = 0;c < sparseArray.getNumCols();c++)
             {
                 if(sparseArray.getValueAt(r,c) == 1){
-                board[r][c] = new DestroyerPiece(Color.LIGHT_GRAY,r,c,(int)(Math.random()*4+2),sparseArray.getDirAt(r, c));
+                board[r][c] = new DestroyerPiece(Color.LIGHT_GRAY,r,c,sparseArray.getTypeAt(r, c),sparseArray.getDirAt(r, c));
                 }
             }
         }
@@ -97,8 +99,7 @@ public class Board {
                 board[zrow][zcol] = null; 
     
         rotation = DestroyerPiece.Direction.Right;
-
-        sparseArray.clear();
+        ShipType = 0;
     }
     
     public SparseArray getArray()

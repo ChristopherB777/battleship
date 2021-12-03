@@ -1,5 +1,6 @@
 package battleship;
 
+import static battleship.Board.sparseArray;
 import java.io.*;
 import java.awt.*;
 import java.awt.geom.*;
@@ -134,6 +135,8 @@ public class Battleship extends JFrame implements Runnable {
 /////////////////////////////////////////////////////////////////////////
     public void reset() {
     Board.Reset();
+    Board.sparseArray.clear();
+
 
     }
 /////////////////////////////////////////////////////////////////////////

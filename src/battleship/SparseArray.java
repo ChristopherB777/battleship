@@ -52,6 +52,18 @@ public class SparseArray
     }
     
     
+    
+    public int getTypeAt(int row, int col)
+    {
+        for(SparseArrayEntry aArray : entries)
+        {
+            if(aArray.getRow() == row && aArray.getCol() == col)
+                return aArray.getType();
+        }
+        return 0;
+    }
+    
+    
 
     public int getValueAt(int row, int col)
     {
@@ -75,15 +87,17 @@ class SparseArrayEntry
     private int row;
     public int col;
     private int value;
+    private int type;
     private DestroyerPiece.Direction dir;
 
     
-    public SparseArrayEntry(int r, int c, int v, DestroyerPiece.Direction d)
+    public SparseArrayEntry(int r, int c, int v, DestroyerPiece.Direction d, int t)
     {
         row = r;
         col = c;
         value = v;
         dir = d;
+        type = t;
     }
     public int getRow()
     {
@@ -97,6 +111,11 @@ class SparseArrayEntry
     {
         return (value);
     }    
+    
+    public int getType()
+    {
+        return(type);
+    }
     
     public DestroyerPiece.Direction getDir()
     {

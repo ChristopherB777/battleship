@@ -49,5 +49,9 @@ public class DestroyerPiece{
     {
         return(direction);
     }
+    public int getType()
+    {
+        return(shipType);
+    }
 
 }
