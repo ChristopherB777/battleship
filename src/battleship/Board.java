@@ -36,13 +36,16 @@ public class Board {
         
         int zrow = row;
         int zcol = column;
-        int shipType = (int)(Math.random()*4+2);;
+        int shipType = (int)(Math.random()*4+2);
+        if((rotation == DestroyerPiece.Direction.Right && zcol+shipType > NUM_COLUMNS )||(rotation == DestroyerPiece.Direction.Down && zrow+shipType > NUM_ROWS))
+            return;
         for (int i = 0;i<shipType;i++){
            board[zrow][zcol] = new DestroyerPiece(Color.LIGHT_GRAY,row,column,shipType);
            if(rotation == DestroyerPiece.Direction.Right)
-           zcol++;
-           else if(rotation == DestroyerPiece.Direction.Down)
+               zcol++;
+           else if(rotation == DestroyerPiece.Direction.Down){
            zrow++;
+           }
         }
         
         
@@ -99,7 +102,6 @@ public class Board {
             {
                 if(sparseArray.getValueAt(r,c) == 1){
                // board[r][c] = new DestroyerPiece(Color.LIGHT_GRAY,r,c,sparseArray.getTypeAt(r, c));
-               
                 int zrow = r;
                 int zcol = c;
                 int shipType = sparseArray.getTypeAt(r, c);
@@ -109,8 +111,6 @@ public class Board {
                    zcol++;
                    else if(sparseArray.getDirAt(r, c) == DestroyerPiece.Direction.Down)
                    zrow++;
-               
-               
                 }
             }
         }
