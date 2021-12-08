@@ -30,9 +30,8 @@ public class Battleship extends JFrame implements Runnable {
                 if (e.BUTTON2 == e.getButton()) {
                 }
                 if (e.BUTTON3 == e.getButton()) {
-                    Board.Reset();
-                    Player.Reset();
-                }
+                    reset();
+               }
                 repaint();
             }
         });
@@ -136,7 +135,7 @@ public class Battleship extends JFrame implements Runnable {
     public void reset() {
     Board.Reset();
     Board.sparseArray.clear();
-
+    Player.Reset();
 
     }
 /////////////////////////////////////////////////////////////////////////

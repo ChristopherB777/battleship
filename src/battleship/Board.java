@@ -29,9 +29,7 @@ public class Board {
         int column = xpixelOffset/xdelta;       
         int row = ypixelOffset/ydelta;    
 
-        
-     //   board[row][column] = new DestroyerPiece(Color.LIGHT_GRAY,row,column,(int)(Math.random()*4+2),rotation);
-        
+
         
         
         int zrow = row;
@@ -78,15 +76,10 @@ public class Board {
             }
         }
         
-        for (int r = 0;r < sparseArray.getNumRows();r++)
-        {
-            for (int c = 0;c < sparseArray.getNumCols();c++)
-            {
-                System.out.print(sparseArray.getValueAt(r, c) + " ");
-            }
-            System.out.println("");
-        }
-    System.out.println("=============================================");
+        
+
+    if(Player.GetCurrentTurn() == Player.getplayer1())
+        Player.getplayer1().getArray(sparseArray);
     Board.Reset();
         
     }
@@ -101,7 +94,6 @@ public class Board {
             for (int c = 0;c < sparseArray.getNumCols();c++)
             {
                 if(sparseArray.getValueAt(r,c) == 1){
-               // board[r][c] = new DestroyerPiece(Color.LIGHT_GRAY,r,c,sparseArray.getTypeAt(r, c));
                 int zrow = r;
                 int zcol = c;
                 int shipType = sparseArray.getTypeAt(r, c);

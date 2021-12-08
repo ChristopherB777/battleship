@@ -4,15 +4,19 @@ import java.awt.Color;
 
 public class Player {
     private static Player currentTurn;
-    private static Player players[] = new Player[2];
+    public static Player players[] = new Player[2];
     private SparseArray array;
-        public static SparseArray player1 = new SparseArray(10,10);
+    public static SparseArray player1 = new SparseArray(10,10);
     public static SparseArray player2 = new SparseArray(10,10);
+ 
 
     
     Player(SparseArray _player)
     {
         array = _player;
+        
+ 
+        
     }
     
     public static void Reset()
@@ -31,10 +35,9 @@ public class Player {
         currentTurn = players[0]; 
     }
     
-    public SparseArray swapArray(SparseArray _array)
+    public void getArray(SparseArray _array)
     {
-        currentTurn.array = _array;
-        return(currentTurn.array);
+        array = _array;
     }
     
     public static Player GetCurrentTurn() {
