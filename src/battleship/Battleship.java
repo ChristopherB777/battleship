@@ -95,9 +95,14 @@ public class Battleship extends JFrame implements Runnable {
 
         int x[] = {Window.getX(0), Window.getX(Window.getWidth2()), Window.getX(Window.getWidth2()), Window.getX(0), Window.getX(0)};
         int y[] = {Window.getY(0), Window.getY(0), Window.getY(Window.getHeight2()), Window.getY(Window.getHeight2()), Window.getY(0)};
+        int Bx[] = {Window.getX(0) ,Window.getX(Window.getWidth2()) ,Window.getX(Window.getWidth2()) ,Window.getX(0) ,Window.getX(0)};
+        int By[] = {Window.getY(Window.getHeight2())/2+35 ,Window.getY(Window.getHeight2())/2+35 ,Window.getY(Window.getHeight2()) ,Window.getY(Window.getHeight2()) ,Window.getY(Window.getHeight2())/22+35};
 //fill border
-        g.setColor(Color.white);
+        g.setColor(Color.LIGHT_GRAY);
         g.fillPolygon(x, y, 4);
+        
+        g.setColor(Color.BLUE);
+        g.fillPolygon(Bx, By, 4);
 // draw border
         g.setColor(Color.blue);
         g.drawPolyline(x, y, 5);

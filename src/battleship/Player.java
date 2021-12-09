@@ -6,9 +6,10 @@ public class Player {
     private static Player currentTurn;
     public static Player players[] = new Player[2];
     private SparseArray array;
-    private static SparseArray player1 = new SparseArray(10,10);
-    private static SparseArray player2 = new SparseArray(10,10);
- 
+    private static SparseArray player1 = new SparseArray(20,10);
+    private static SparseArray player2 = new SparseArray(20,10);
+    private int numPiecesAdded;
+    private int miss;
 
     
     Player(SparseArray _player)
@@ -24,6 +25,7 @@ public class Player {
         players[0] = new Player(player1);
         players[1] = new Player(player2);
         currentTurn = players[0];
+        
         
     }
     
@@ -79,6 +81,21 @@ public class Player {
         return(players[1]);
     }   
     
-
+    public void addShipsPlace()
+    {
+        numPiecesAdded++;
+    }
+    public int getShipsPlace()
+    {
+        return (numPiecesAdded);
+    }
+    public void addMiss()
+    {
+        miss++;
+    }
+    public int getmMiss()
+    {
+        return (miss);
+    }
     
 }

@@ -3,12 +3,12 @@ import java.awt.*;
 
 public class Board {
     private static int numPiecesAdded = 0;
-    public final static int NUM_ROWS = 10;
+    public final static int NUM_ROWS = 20;
     public final static int NUM_COLUMNS = 10;          
     private static int points;
     private static DestroyerPiece board[][] = new DestroyerPiece[NUM_ROWS][NUM_COLUMNS];
     public static DestroyerPiece.Direction rotation;
-    public static SparseArray sparseArray = new SparseArray(10,10);
+    public static SparseArray sparseArray = new SparseArray(20,10);
     static DestroyerPiece.Direction dir = DestroyerPiece.Direction.Right; 
     public static int ShipType;
     
@@ -37,17 +37,71 @@ public class Board {
         int shipType = (int)(Math.random()*4+2);
         if((rotation == DestroyerPiece.Direction.Right && zcol+shipType > NUM_COLUMNS )||(rotation == DestroyerPiece.Direction.Down && zrow+shipType > NUM_ROWS))
             return;
-        for (int i = 0;i<shipType;i++){
-           board[zrow][zcol] = new DestroyerPiece(Color.LIGHT_GRAY,row,column,shipType);
-           if(rotation == DestroyerPiece.Direction.Right)
-               zcol++;
-           else if(rotation == DestroyerPiece.Direction.Down){
-           zrow++;
-           }
+        Player currentTurn = Player.GetCurrentTurn();
+        int times = 0;
+        
+        if (currentTurn.getShipsPlace() < 5){
+            if (row >= 10 && board[row][column] == null){
+                if (rotation == DestroyerPiece.Direction.Right){
+                    for (int i = 0;i<shipType;i++){
+                        if (board[zrow][zcol] == null){
+                            board[zrow][zcol] = new DestroyerPiece(Color.LIGHT_GRAY,row,column,shipType);
+                            zcol++;
+                        }
+                    }
+                    currentTurn.addShipsPlace();
+                }
+                else if (rotation == DestroyerPiece.Direction.Down){
+                    for (int i = 0;i<shipType;i++){
+                        if (board[zrow][zcol] == null){
+                            board[zrow][zcol] = new DestroyerPiece(Color.LIGHT_GRAY,row,column,shipType);
+                            zrow++;
+                        }
+                    }
+                    currentTurn.addShipsPlace();
+                }  
+            }  
+            if (currentTurn.getShipsPlace() == 5){
+                Player.switchTurn();
+                Board.Load();
+                times++;
+                    if (times == 1)
+                        Board.unLoad();
+            }
+            
         }
-        
-        
+        else
+        {
+            if (row < 10 && board[row][column] == null)
+            {
+                
+                if (Player.GetCurrentTurn().getArray().getValueAt(row+10,column) == 1)//hit
+                {   
+                    board[zrow][zcol] = new DestroyerPiece(Color.red,zrow,zcol,1);
 
+                    Board.Load();
+                    Player.switchTurn();
+                    
+                    
+                    Board.unLoad();
+                    
+                    board[zrow+10][zcol] = new DestroyerPiece(Color.red,zrow,zcol,1);
+                }
+                
+                else 
+                {                
+            //        board[row][column] = new DestroyerPiece(Color.white,row,column,1);
+                    
+                    currentTurn.addMiss();
+                    Player.switchTurn();
+                    Board.Load();
+                    Board.unLoad();
+                    
+            //        board[row][column] = new DestroyerPiece(Color.white,row,column,1);
+                }
+            }
+        }
+    //    System.out.println(Player.GetCurrentTurn().getArray().getValueAt(row+10,column));
     }
     public static void Rotate()
     {
@@ -70,6 +124,13 @@ public class Board {
                     dir = board[zrow][zcol].getDir();
                     ShipType = board[zrow][zcol].getType();
                 }
+                else if (board[zrow][zcol].getColor() == Color.white)
+                    val = 2;
+                
+                else if (board[zrow][zcol].getColor() == Color.red)
+                    val = 3;
+                    
+                
                 sparseArray.add(new SparseArrayEntry(zrow,zcol,val,dir,ShipType));
                 }
             }
@@ -79,8 +140,7 @@ public class Board {
 
 
     Player.GetCurrentTurn().swapArray(sparseArray);
-    Board.Reset();
-    Player.switchTurn();
+    Board.Reset();   
     sparseArray.clear();
     //   sparseArray.add(new SparseArrayEntry(1,1,1,DestroyerPiece.Direction.Down,1)); 
 //        for (int r = 0;r < Player.GetCurrentTurn().getArray().getNumRows();r++)
@@ -104,20 +164,30 @@ public class Board {
         {
             for (int c = 0;c <  Player.getOtherTurn().getArray().getNumCols();c++)
             {
-                if( Player.getOtherTurn().getArray().getValueAt(r,c) == 1){
-                int zrow = r;
-                int zcol = c;
-                int shipType =  Player.getOtherTurn().getArray().getTypeAt(r, c);
-                for (int i = 0;i<shipType;i++){
-                   board[zrow][zcol] = new DestroyerPiece(Color.LIGHT_GRAY,zrow,zcol,shipType);
-                   if(Player.getOtherTurn().getArray().getDirAt(r, c) == DestroyerPiece.Direction.Right)
-                   zcol++;
-                   else if(Player.getOtherTurn().getArray().getDirAt(r, c) == DestroyerPiece.Direction.Down)
-                   zrow++;
+                if( Player.getOtherTurn().getArray().getValueAt(r,c) == 1)
+                {
+                    int zrow = r;
+                    int zcol = c;
+                    int shipType =  Player.getOtherTurn().getArray().getTypeAt(r, c);
+                    for (int i = 0;i<shipType;i++)
+                    {
+                        board[zrow][zcol] = new DestroyerPiece(Color.LIGHT_GRAY,zrow,zcol,shipType);
+                        if(Player.getOtherTurn().getArray().getDirAt(r, c) == DestroyerPiece.Direction.Right)
+                        zcol++;
+                        else if(Player.getOtherTurn().getArray().getDirAt(r, c) == DestroyerPiece.Direction.Down)
+                        zrow++;
+                    }
+                }
+                else if(sparseArray.getValueAt(r,c) != 1)
+                {
+                    if (sparseArray.getValueAt(r,c) == 2)
+                        board[r][c] = new DestroyerPiece(Color.white,r,c,1);
+                    else if (sparseArray.getValueAt(r,c) == 3)
+                        board[r][c] = new DestroyerPiece(Color.red,r,c,1);
+
                 }
             }
         }
-    }
 
 //        for (int r = 0;r < Player.GetCurrentTurn().getArray().getNumRows();r++)
 //        {
