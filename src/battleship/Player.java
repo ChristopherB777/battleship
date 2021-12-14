@@ -10,6 +10,7 @@ public class Player {
     private static SparseArray player2 = new SparseArray(20,10);
     private int numPiecesAdded;
     private int miss;
+    public int pieceNum;
 
     
     Player(SparseArray _player)
@@ -55,7 +56,10 @@ public class Player {
     }
     
     public static Player GetCurrentTurn() {
-        return (currentTurn);
+        if(currentTurn == players[0])
+            return(currentTurn =players[0]);
+        else
+        return(players[1]);
     }
     
     public static Player getOtherTurn()

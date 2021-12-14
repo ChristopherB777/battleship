@@ -6,11 +6,16 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.sound.sampled.*;
+
 
 public class Battleship extends JFrame implements Runnable {
     boolean animateFirstTime = true;
     Image image;
     Graphics2D g;
+    sound bgSound = null;    
+    
+
 
     public static void main(String[] args) {
         Battleship frame = new Battleship();
@@ -57,10 +62,9 @@ public class Battleship extends JFrame implements Runnable {
                 if (e.VK_R == e.getKeyCode()) {
                     Board.Rotate();
                 } else if (e.VK_SPACE == e.getKeyCode()) {
-                    Board.Load();
+                  //  Board.addPlanes();
                 } else if (e.VK_LEFT == e.getKeyCode()) {
                 } else if (e.VK_RIGHT == e.getKeyCode()) {
-                    Board.unLoad();
                 } else if (e.VK_ESCAPE == e.getKeyCode()) {
                     reset();
                 }
@@ -143,6 +147,7 @@ public class Battleship extends JFrame implements Runnable {
     Player.Reset();
 
     }
+
 /////////////////////////////////////////////////////////////////////////
     public void animate() {
 
@@ -153,6 +158,10 @@ public class Battleship extends JFrame implements Runnable {
                 Window.ysize = getSize().height;
             }
 
+            
+            
+            
+            
             reset();
 
         }
@@ -177,4 +186,48 @@ public class Battleship extends JFrame implements Runnable {
 
 }
 
+class sound implements Runnable {
+    Thread myThread;
+    File soundFile;
+    public boolean donePlaying = false;
+    public boolean stopPlaying = false;
+    sound(String _name)
+    {
+        soundFile = new File(_name);
+        myThread = new Thread(this);
+        myThread.start();
+    }
+    public void run()
+    {
+        try {
+        AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
+        AudioFormat format = ais.getFormat();
+    //    System.out.println("Format: " + format);
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+        SourceDataLine source = (SourceDataLine) AudioSystem.getLine(info);
+        source.open(format);
+        source.start();
+        int read = 0;
+        byte[] audioData = new byte[16384];
+        while (!stopPlaying && read > -1){
+            read = ais.read(audioData,0,audioData.length);
+            if (read >= 0) {
+                source.write(audioData,0,read);
+            }
+        }
+        donePlaying = true;
+
+        source.drain();
+        source.close();
+        }
+        catch (Exception exc) {
+            System.out.println("error: " + exc.getMessage());
+            exc.printStackTrace();
+        }
+    }
+    
+
+    
+
+}
  

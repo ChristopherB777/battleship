@@ -8,7 +8,7 @@ import java.awt.Graphics2D;
 
 public class DestroyerPiece{
     public enum Direction{Right,Down};
-    private int shipType =3; 
+    private int shipType; 
     private int row;
     private int column;
     private Color color;
