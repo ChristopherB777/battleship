@@ -1,2 +1,0 @@
-battleship.SparseArray
-battleship.SparseArrayEntry

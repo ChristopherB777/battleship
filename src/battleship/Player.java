@@ -11,20 +11,19 @@ public class Player {
     private int numPiecesAdded;
     private int miss;
     public int pieceNum;
+    private boolean winner;
 
     
-    Player(SparseArray _player)
+    Player(SparseArray _player, int shipnum)
     {
         array = _player;
-        
- 
-        
+        pieceNum = shipnum;
     }
     
     public static void Reset()
     {
-        players[0] = new Player(player1);
-        players[1] = new Player(player2);
+        players[0] = new Player(player1,0);
+        players[1] = new Player(player2,0);
         currentTurn = players[0];
         
         
@@ -89,6 +88,11 @@ public class Player {
     {
         numPiecesAdded++;
     }
+    public int getPieceNum()
+    {
+        return(pieceNum);
+    }
+    
     public int getShipsPlace()
     {
         return (numPiecesAdded);
@@ -100,6 +104,16 @@ public class Player {
     public int getmMiss()
     {
         return (miss);
+    }
+    
+    public boolean isWinner()
+    {
+        return(winner);
+    }
+    
+    public void setWinner()
+    {
+        winner = true;
     }
     
 }
