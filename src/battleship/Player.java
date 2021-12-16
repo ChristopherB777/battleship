@@ -10,6 +10,7 @@ public class Player {
     private static SparseArray player2 = new SparseArray(20,10);
     private int numPiecesAdded;
     private int miss;
+    private int hit;
     public int pieceNum;
     private boolean winner;
 
@@ -97,11 +98,20 @@ public class Player {
     {
         return (numPiecesAdded);
     }
+    
     public void addMiss()
     {
         miss++;
     }
-    public int getmMiss()
+    public int getMiss()
+    {
+        return (miss);
+    }
+    public void addHit()
+    {
+        miss++;
+    }
+    public int getHits()
     {
         return (miss);
     }

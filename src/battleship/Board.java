@@ -13,8 +13,9 @@ public class Board {
     public static SparseArray sparseArray = new SparseArray(20,10);
     static DestroyerPiece.Direction dir = DestroyerPiece.Direction.Right; 
     public static int ShipType;
-    public static sound bgSound = null;    
-
+    public static sound bgSound = null;   
+    public static boolean TurnChange;
+    public static int times = 1;
     
    // DestroyerPiece
     
@@ -49,10 +50,9 @@ public class Board {
         int zrow = row;
         int zcol = column;
         int shipType = (int)(Math.random()*4+2);
-        if((rotation == DestroyerPiece.Direction.Right && zcol+shipType > NUM_COLUMNS )||(rotation == DestroyerPiece.Direction.Down && zrow+shipType > NUM_ROWS))
-            return;
         Player currentTurn = Player.GetCurrentTurn();
-        int times = 0;
+        if(times <= 2 && ((rotation == DestroyerPiece.Direction.Right && zcol+shipType > NUM_COLUMNS )||(rotation == DestroyerPiece.Direction.Down && zrow+shipType > NUM_ROWS)))
+            return;
         
         if (currentTurn.getShipsPlace() < 5){
             if (row >= 10 && board[row][column] == null){
@@ -87,26 +87,31 @@ public class Board {
                 Player.switchTurn();
                 Board.Load();
                 times++;
-                    if (times == 1)
+                    if (times <= 3)
                         Board.unLoad();
             }
             
         }
         else
         {
-          if(Player.getplayer1().isWinner() || Player.getplayer2().isWinner())
-              return;
-          else  if (row < 10 && board[row][column] == null)
+            if(Player.getplayer1().isWinner() || Player.getplayer2().isWinner())
+                 return;
+            else  if (row < 10 && board[row][column] == null)
             {
+                Color hitColor = null;
                 if (Player.GetCurrentTurn().getArray().getValueAt(row+10,column) == 1)//hit
                 {   
+                    hitColor = Color.red;
                     board[zrow][zcol] = new DestroyerPiece(Color.red,zrow,zcol,1);
+                    currentTurn.addHit();
+                    
                     sparseArray.add(new SparseArrayEntry(zrow,zcol,3,dir,1));
                     bgSound = new sound("explode1.wav");   
                     if (bgSound.donePlaying) 
                     bgSound.stopPlaying = true;
                     
                     Board.Load();
+                    
                     if(Player.GetCurrentTurn() == Player.players[0])
                         Player.players[1].pieceNum--;
                     else
@@ -114,16 +119,14 @@ public class Board {
                     boolean iswin = checkWin();
                     if(iswin)
                         Player.GetCurrentTurn().setWinner();
-                    else
-                    Player.switchTurn();
-                    Board.unLoad();
-                    
-                   board[zrow+10][zcol] = new DestroyerPiece(Color.red,zrow,zcol,1);
+//                    else
+//                    Player.switchTurn();
+//                    Board.unLoad();
                 }
                 else 
-                {                
+                {          
+                    hitColor = Color.white;
                     board[row][column] = new DestroyerPiece(Color.white,row,column,1);
-                    
                     currentTurn.addMiss();
                     
                     bgSound = new sound("splash.wav");   
@@ -131,14 +134,21 @@ public class Board {
                     bgSound.stopPlaying = true;
                     
                     Board.Load();
-                    Player.switchTurn();
-                    Board.unLoad();
                     
-            //        board[row][column] = new DestroyerPiece(Color.white,row,column,1);
+//                    Player.switchTurn();
+//                    Board.unLoad();
+                    
                 }
+                times++;
+                TurnChange = true;
+                Player.switchTurn();
+                Board.unLoad();
+                if (hitColor == Color.red)
+                    board[row+10][column].changeColor(hitColor);
+                else
+                    board[row+10][column] = new DestroyerPiece(hitColor,row,column,1);
             }
-        }
-    //    System.out.println(Player.GetCurrentTurn().getArray().getValueAt(row+10,column));
+        }   
     }
     public static void Rotate()
     {
@@ -292,6 +302,13 @@ public class Board {
             }
         }        
         
+        if (TurnChange)
+        {
+            g.setColor(Color.BLUE);
+            g.fillRect(28,70,600,750);   
+            
+        }
+        
         if (Player.GetCurrentTurn().isWinner())
         {
             g.setColor(Color.RED);
@@ -299,6 +316,14 @@ public class Board {
                 StringCentered(g,250,554,"Player 1 is the Winner","Papyrus",30);
             else
                 StringCentered(g,250,554,"Player 2 is the Winner","Papyrus",30);
+        }
+        else
+        {
+            g.setColor(Color.white);
+            if (Player.GetCurrentTurn() == Player.players[0])
+                StringCentered(g,250,757,"Player 1 turn","Papyrus",45);
+            else
+                StringCentered(g,250,757,"Player 2 turn","Papyrus",45);
         }
         
     }
