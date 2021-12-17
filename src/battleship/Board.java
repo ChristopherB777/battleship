@@ -1,5 +1,6 @@
 package battleship;
 import java.awt.*;
+import java.io.File;
 import javax.sound.sampled.*;
 
 
@@ -20,14 +21,14 @@ public class Board {
    // DestroyerPiece
     
     
-//    public static void addPlanes()
-//    {
-//        int row = (int)(Math.random()*4+9);
-//        int col = (int)(Math.random()*1+9);
-//        board[row][col] = new DestroyerPiece(Color.LIGHT_GRAY,row,col,1);
-//        row = 0;
-//        col = 0;
-//    }
+    public static void addPlanes()
+    {
+        int row = (int)(Math.random()*4+9);
+        int col = (int)(Math.random()*1+9);
+        board[row][col] = new DestroyerPiece(Color.LIGHT_GRAY,row,col,1);
+        row = 0;
+        col = 0;
+    }
     
      public static void AddPiece(int xpixel,int ypixel) {
 
@@ -105,12 +106,14 @@ public class Board {
                 {   
                     hitColor = Color.red;
                     board[zrow][zcol] = new DestroyerPiece(Color.red,zrow,zcol,1);
+                    board[zrow+10][zcol] = null;
                     
-                    sparseArray.add(new SparseArrayEntry(zrow,zcol,3,dir,1));
+                
                     bgSound = new sound("explode1.wav");   
                     if (bgSound.donePlaying) 
                     bgSound.stopPlaying = true;
-                    
+                    System.out.println(bgSound.stopPlaying);
+
                     Board.Load();
                     
                     if(Player.GetCurrentTurn() == Player.players[0])
@@ -118,14 +121,13 @@ public class Board {
                     else
                          Player.players[0].pieceNum--;
                     boolean iswin = checkWin();
-                    if(iswin)
-                    {
-                        Player.GetCurrentTurn().setWinner();
-                        return;
-                    }
-//                    else
-//                    Player.switchTurn();
-//                    Board.unLoad();
+                        if(iswin)
+                        {
+                            Player.GetCurrentTurn().setWinner();
+                            return;
+                        }
+
+                    
                 }
                 else 
                 {          
@@ -136,12 +138,13 @@ public class Board {
                     bgSound = new sound("splash.wav");   
                     if (bgSound.donePlaying) 
                     bgSound.stopPlaying = true;
-                    
+                                        System.out.println(bgSound.stopPlaying);
+                    if(bgSound.stopPlaying){
                     Board.Load();
                     
 //                    Player.switchTurn();
 //                    Board.unLoad();
-                    
+                    }
                 }
                 times++;
                 TurnChange = true;
@@ -224,7 +227,7 @@ public class Board {
 
     
     public static void unLoad(){
-        Reset();
+     Reset();
         //Player.switchTurn();
         for (int r = 0;r < Player.getOtherTurn().getArray().getNumRows();r++)
         {
@@ -350,4 +353,44 @@ public class Board {
         ypos = Window.getYNormal(ypos);
         g.drawString(text, xpos, ypos);           
     }       
+}
+class sound implements Runnable {
+    Thread myThread;
+    File soundFile;
+    public boolean donePlaying = false;
+    public boolean stopPlaying = false;
+    sound(String _name)
+    {
+        soundFile = new File(_name);
+        myThread = new Thread(this);
+        myThread.start();
+    }
+    public void run()
+    {
+        try {
+        AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
+        AudioFormat format = ais.getFormat();
+    //    System.out.println("Format: " + format);
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+        SourceDataLine source = (SourceDataLine) AudioSystem.getLine(info);
+        source.open(format);
+        source.start();
+        int read = 0;
+        byte[] audioData = new byte[16384];
+        while (!stopPlaying && read > -1){
+            read = ais.read(audioData,0,audioData.length);
+            if (read >= 0) {
+                source.write(audioData,0,read);
+            }
+        }
+        donePlaying = true;
+
+        source.drain();
+        source.close();
+        }
+        catch (Exception exc) {
+            System.out.println("error: " + exc.getMessage());
+            exc.printStackTrace();
+        }
+    }
 }
