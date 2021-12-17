@@ -66,6 +66,7 @@ public class Battleship extends JFrame implements Runnable {
                   Board.TurnChange = false;
                 } else if (e.VK_LEFT == e.getKeyCode()) {
                 } else if (e.VK_RIGHT == e.getKeyCode()) {
+                    Player.GetCurrentTurn().setWinner();
                 } else if (e.VK_ESCAPE == e.getKeyCode()) {
                     reset();
                 }
@@ -146,7 +147,7 @@ public class Battleship extends JFrame implements Runnable {
     Board.Reset();
     Board.sparseArray.clear();
     Player.Reset();
-
+   
     }
 
 /////////////////////////////////////////////////////////////////////////

@@ -28,7 +28,7 @@ public class Board {
 //        row = 0;
 //        col = 0;
 //    }
-  
+    
      public static void AddPiece(int xpixel,int ypixel) {
 
 
@@ -44,7 +44,8 @@ public class Board {
         int column = xpixelOffset/xdelta;       
         int row = ypixelOffset/ydelta;    
 
-
+        if (TurnChange)
+            return;
         
         
         int zrow = row;
@@ -87,10 +88,11 @@ public class Board {
                 Player.switchTurn();
                 Board.Load();
                 times++;
-                    if (times <= 3)
+                    if (times <= 3){
+                        TurnChange = true;
                         Board.unLoad();
+                    }
             }
-            
         }
         else
         {
@@ -103,7 +105,6 @@ public class Board {
                 {   
                     hitColor = Color.red;
                     board[zrow][zcol] = new DestroyerPiece(Color.red,zrow,zcol,1);
-                    currentTurn.addHit();
                     
                     sparseArray.add(new SparseArrayEntry(zrow,zcol,3,dir,1));
                     bgSound = new sound("explode1.wav");   
@@ -118,7 +119,10 @@ public class Board {
                          Player.players[0].pieceNum--;
                     boolean iswin = checkWin();
                     if(iswin)
+                    {
                         Player.GetCurrentTurn().setWinner();
+                        return;
+                    }
 //                    else
 //                    Player.switchTurn();
 //                    Board.unLoad();
@@ -147,6 +151,7 @@ public class Board {
                     board[row+10][column].changeColor(hitColor);
                 else
                     board[row+10][column] = new DestroyerPiece(hitColor,row,column,1);
+                return;
             }
         }   
     }
@@ -258,7 +263,7 @@ public class Board {
 //        
         }
     //sparseArray.getDirAt(r, c)
-     
+    
     public static void Reset() {
         numPiecesAdded = 0;
 //clear the board.
@@ -305,25 +310,32 @@ public class Board {
         if (TurnChange)
         {
             g.setColor(Color.BLUE);
-            g.fillRect(28,70,600,750);   
-            
+            g.fillRect(28,400,602,415); 
+            g.setColor(Color.white);
+            StringCentered(g,250,200,"Press Space","Papyrus",50);
         }
         
         if (Player.GetCurrentTurn().isWinner())
         {
             g.setColor(Color.RED);
             if (Player.GetCurrentTurn() == Player.players[0])
-                StringCentered(g,250,554,"Player 1 is the Winner","Papyrus",30);
+            {
+                StringCentered(g,300,554,"Player 1 is the Winner","Papyrus",60);
+                StringCentered(g,300,500,"with "+Player.players[0].getMiss() + " miss","Papyrus",60);
+            }
             else
-                StringCentered(g,250,554,"Player 2 is the Winner","Papyrus",30);
+            {
+                StringCentered(g,300,554,"Player 2 is the Winner","Papyrus",60);
+                StringCentered(g,300,500,"with "+Player.players[1].getMiss() + " miss","Papyrus",60);
+            }
         }
         else
         {
             g.setColor(Color.white);
             if (Player.GetCurrentTurn() == Player.players[0])
-                StringCentered(g,250,757,"Player 1 turn","Papyrus",45);
+                StringCentered(g,300,757,"Player 1 turn","Papyrus",45);
             else
-                StringCentered(g,250,757,"Player 2 turn","Papyrus",45);
+                StringCentered(g,300,757,"Player 2 turn","Papyrus",45);
         }
         
     }

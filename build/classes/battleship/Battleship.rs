@@ -1,2 +1,0 @@
-battleship.Battleship
-battleship.sound
