@@ -16,8 +16,8 @@ public class Board {
     public static int ShipType;
     public static sound bgSound = null;   
     public static boolean TurnChange;
+    public static boolean Instructions = true;
     public static int times = 1;
-    
    // DestroyerPiece
     
     
@@ -318,6 +318,26 @@ public class Board {
             StringCentered(g,250,200,"Press Space","Papyrus",50);
         }
         
+        if (Instructions)
+        {
+            g.setColor(Color.BLUE);
+            g.fillRect(28,70,600,750); 
+            g.setColor(Color.white);
+            StringCentered(g,270,700,"Welcome to Battleship","Papyrus",50);
+            StringCentered(g,270,600,"Each player will ","Papyrus",50);
+            StringCentered(g,290,550,"place 5 ships of random size","Papyrus",50);
+            StringCentered(g,290,485,"Between each turn a","Papyrus",40);
+            StringCentered(g,290,435,"blue screen will appear.","Papyrus",40);
+            StringCentered(g,290,385,"Press the spacebar to ","Papyrus",40);    
+            StringCentered(g,290,335,"remove it and swap seats with your opponent","Papyrus",30);
+            StringCentered(g,290,275,"During your turn, click on the upper","Papyrus",35);   
+            StringCentered(g,290,225,"half of the board to place your marker.","Papyrus",35);
+            StringCentered(g,290,175,"A sound will play if you hit their ship","Papyrus",35); 
+            StringCentered(g,270,100,"First with most hits wins","Papyrus",50);            
+            StringCentered(g,270,50,"Press Space to continue","Papyrus",40);
+        }
+        
+        
         if (Player.GetCurrentTurn().isWinner())
         {
             g.setColor(Color.RED);
@@ -332,7 +352,7 @@ public class Board {
                 StringCentered(g,300,500,"with "+Player.players[1].getMiss() + " miss","Papyrus",60);
             }
         }
-        else
+        else 
         {
             g.setColor(Color.white);
             if (Player.GetCurrentTurn() == Player.players[0])

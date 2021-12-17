@@ -64,6 +64,8 @@ public class Battleship extends JFrame implements Runnable {
                 } else if (e.VK_SPACE == e.getKeyCode()) {
                   //  Board.addPlanes();
                   Board.TurnChange = false;
+                if(Board.Instructions)  
+                  Board.Instructions = false;
                 } else if (e.VK_LEFT == e.getKeyCode()) {
                 } else if (e.VK_RIGHT == e.getKeyCode()) {
                     Player.GetCurrentTurn().setWinner();
